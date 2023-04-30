@@ -25,4 +25,10 @@ jobs:
           username: ${{ secrets.DOCKER_ID}}
           password: ${{ secrets.DOCKER_PASSWORD }}
       - run: docker build -t mikesglks/multi-client ./client
-      - run: docker push mikesglks/multi-client
+       -run: docker build -t mikesglks/multi-nginx ./nginx
+       -run: docker build -t mikesglks/multi-server ./server
+       -run: docker build -t mikesglks/multi-worker ./worker
+      - run: docker push mikesglks/multi-client 
+      - run: docker push mikesglks/multi-nginx
+      - run: docker push mikesglks/multi-server
+      - run: docker push mikesglks/multi-worker
