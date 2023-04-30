@@ -1,5 +1,4 @@
-name: Client side CI
-
+name: Client side workflow
 on:
   push:
     branches: [ master ]
@@ -8,10 +7,21 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  run-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - run: cd client
-      - run: docker build -t msygkelakis/client -f ./client/Dockerfile.dev ./client
-      - run: docker run -e CI=true msygkelakis/client npm run test 
+      - run: docker build -t mikesglks/client -f ./client/Dockerfile.dev ./client
+      - run: docker run -e CI=true mikesglks/client npm run test 
+  push-to-dockerhub:
+    needs: run-tests
+    runs-on: ubuntu-latest
+    steps:  
+      -env:
+          DOCKER_ID: ${{ secrets.DOCKER_ID }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      - uses: actions/checkout@v3
+      - run: docker build -t mikesglks/multi-client ./client
+      - run: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+      - run: docker push mikesglks/multi-client
