@@ -1,0 +1,35 @@
+{ 
+    "AWSEBDockerrunVersion": 2 , 
+    "containerDefinitions": [ 
+        { 
+            "name": "client", 
+            "image": "mikesglks/multi-client",
+            "hostname": "client", 
+            "essential": false	
+        },  
+        { 
+            "name" : "api", 
+            "image": "mikesglks/multi-api",
+            "hostname": "api",
+            "essential": false
+        }, 
+        {
+            "name": "worker",
+            "image": "mikesglks/multi-worker",
+            "hostname": "worker",
+            "essential": false
+        }, 
+        { 
+            "name": "nginx", 
+            "image": "mikesglks/multi-nginx",
+            "essential": true,
+            "portMappings": [ 
+                { 
+                    "hostPort": 80, 
+                    "containerPort": 80 
+                } 
+            ], 
+            "links": ["client", "api"]
+        }
+    ]	
+}
