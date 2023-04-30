@@ -20,5 +20,5 @@ jobs:
     steps:  
       - uses: actions/checkout@v3
       - run: docker build -t mikesglks/multi-client ./client
-      - run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{secrets.DOCKER_ID}} --password-stdin -i
+      - run: docker login -u ${{secrets.DOCKER_ID}} -p ${{secrets.DOCKER_PASSWORD}}
       - run: docker push mikesglks/multi-client
